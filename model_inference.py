@@ -37,6 +37,7 @@ def get_run_id(model_name, stage='Production'):
   return prod_run.run_id
 
 
+# Replace the first parameter with your model's name
 run_id = get_run_id('titanic_model_demo', stage='Production')
 run_id
 
