@@ -14,10 +14,7 @@ from data.create_tables import create_tables
 
 # COMMAND ----------
 
-feature_store_tables = create_tables()
-
-for table_name, location in feature_store_tables.items():
-  print(f"Table name: {table_name}    Location: {location}")
+create_tables()
 
 # COMMAND ----------
 

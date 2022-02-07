@@ -23,42 +23,45 @@ def create_tables():
 
   passenger_label_types = [('PassengerId',StringType()),
                            ('Survived',   IntegerType())]
-
-
-  passenger_ticket_schema = StructType()
-  for col_name, type in passenger_ticket_types:
-    passenger_ticket_schema.add(col_name, type)
-
-  passenger_dempgraphic_schema = StructType()
-  for col_name, type in passenger_demographic_types:
-    passenger_dempgraphic_schema.add(col_name, type)
-
-  passenger_label_schema = StructType()
-  for col_name, type in passenger_label_types:
-    passenger_label_schema.add(col_name, type)
-
+  
+  
+  def create_schema(col_types):
+    struct = StructType()
+    for col_name, type in col_types:
+      struct.add(col_name, type)
+    return struct
+  
+  passenger_ticket_schema =      create_schema(passenger_ticket_types)
+  passenger_dempgraphic_schema = create_schema(passenger_demographic_types)
+  passenger_label_schema =       create_schema(passenger_label_types)
+  
+  
+  def create_pd_dataframe(csv_file_path, schema):
+    df = pd.read_csv(csv_file_path)
+    return spark.createDataFrame(df, schema = schema)
+  
+  
+  passenger_ticket_features =      create_pd_dataframe('data/passenger_ticket.csv', passenger_ticket_schema)
+  passenger_demographic_features = create_pd_dataframe('data/passenger_demographic.csv', passenger_dempgraphic_schema)
+  passenger_labels =               create_pd_dataframe('data/passenger_labels.csv', passenger_label_schema)
+  
+  
+  def write_to_delta(spark_df, delta_table_name):
+    spark_df.write.mode('overwrite').format('delta').saveAsTable(delta_table_name)
     
-  # Read csv files  
-  pd_ticket_features = pd.read_csv('data/passenger_ticket.csv')
-  pd_demographic_features = pd.read_csv('data/passenger_demographic.csv')
-  pd_labels = pd.read_csv('data/passenger_labels.csv')
-
-
-  # Convert to Spark DataFrames
-  passenger_ticket_features = spark.createDataFrame(pd_ticket_features, schema = passenger_ticket_schema)
-  passenger_demographic_features = spark.createDataFrame(pd_demographic_features, schema = passenger_dempgraphic_schema)
-  passenger_labels = spark.createDataFrame(pd_labels, schema = passenger_label_schema)
-
-  # Write to Delta
-  table_mapping = {"ticket_features_source_table":      "default.passenger_ticket_feautures",
-                   "demographic_features_source_table": "default.passenger_demographic_features",
-                   "labels_source_table":               "default.passenger_labels"}
-  
-  passenger_ticket_features.write.mode('overwrite').format('delta').saveAsTable(table_mapping['ticket_features_source_table'])
-  passenger_demographic_features.write.mode('overwrite').format('delta').saveAsTable(table_mapping['demographic_features_source_table'])
-  passenger_labels.write.mode('overwrite').format('delta').saveAsTable(table_mapping['labels_source_table'])
-  
-  return table_mapping
+  delta_tables = {"ticket":       "default.passenger_ticket_feautures",
+                  "demographic":  "default.passenger_demographic_features",
+                  "labels":       "default.passenger_labels"}
+    
+  write_to_delta(passenger_ticket_features,      delta_tables['ticket'])
+  write_to_delta(passenger_demographic_features, delta_tables['demographic'])
+  write_to_delta(passenger_labels,               delta_tables['labels'])
   
   
+  out = f"""The following tables were created:
+          - {delta_tables['ticket']}
+          - {delta_tables['demographic']}
+          - {delta_tables['labels']}
+       """
   
+  print(out)
