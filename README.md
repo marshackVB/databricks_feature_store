@@ -4,6 +4,8 @@ This Databricks [Repo](https://docs.databricks.com/repos.html) provides an examp
 
 Also, by create domain-specific feature sets, tables become more modular and can be leveraged across multiple projects and across teams. 
 
+**Note**: If you require model deployment via Rest API, see the **online_store** directory for a demo deployment.
+
 ### Getting started
 
 Note: Step 3 below differs slightly for AWS Single Tenant customers.
