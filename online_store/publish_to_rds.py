@@ -73,18 +73,18 @@ fs.write_table(
 # COMMAND ----------
 
 # Aurora cluster's Writer instance endpoint
-host = 'feature-store.cluster-c7e3jyejr1kf.us-east-1.rds.amazonaws.com'
+host = 'feature-store.c7e3jyejr1kf.us-east-1.rds.amazonaws.com'
 port = 3306
 
 # Delta database and table name
 database_name = 'feature_store'
 table_name = 'online_feature_table'
 
-user = dbutils.secrets.get(scope="aurora_writer", key="aurora-user")
-password = dbutils.secrets.get(scope="aurora_writer", key="aurora-password")
+user = dbutils.secrets.get(scope="feature_store_writer", key="feature_store-user")
+password = dbutils.secrets.get(scope="feature_store_writer", key="feature_store-password")
 
-read_secret_prefix = 'aurora_reader/aurora'
-write_secret_prefix = 'aurora_writer/aurora'
+read_secret_prefix = 'feature_store_reader/feature_store'
+write_secret_prefix = 'feature_store_writer/feature_store'
 
 fs = FeatureStoreClient()
 

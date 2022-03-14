@@ -38,7 +38,7 @@ def get_run_id(model_name, stage='Production'):
 
 
 # Replace the first parameter with your model's name
-run_id = get_run_id('titanic_model_demo', stage='Production')
+run_id = get_run_id('feature_store_models', stage='Production')
 run_id
 
 # COMMAND ----------
@@ -47,7 +47,7 @@ run_id
 
 # COMMAND ----------
 
-model_uri = f'runs:/{run_id}/model_packaged'
+model_uri = f'runs:/{run_id}/model'
 
 with_predictions = fs.score_batch(model_uri, new_passenger_records)
 

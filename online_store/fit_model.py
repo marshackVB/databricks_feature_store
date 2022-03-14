@@ -58,13 +58,8 @@ mlflow.set_experiment(experiment_location)
 
 feature_lookups = [
     FeatureLookup(
-      table_name = 'default.ticket_features',
-      feature_names = ['CabinChar', 'CabinMulti', 'Embarked', 'FareRounded', 'Parch', 'Pclass'],
-      lookup_key = 'PassengerId'
-    ),
-    FeatureLookup(
-      table_name = 'default.demographic_features',
-      feature_names = ['Age', 'NameMultiple', 'NamePrefix', 'Sex', 'SibSp'],
+      table_name = 'default.online_feature_table',
+      feature_names = ['Age', 'NameMultiple', 'NamePrefix', 'Sex', 'SibSp', 'CabinChar', 'CabinMulti', 'Embarked', 'FareRounded', 'Parch', 'Pclass'],
       lookup_key = 'PassengerId'
     )
   ]
