@@ -2,11 +2,15 @@
 
 This Databricks [Repo](https://docs.databricks.com/repos.html) provides an example [Feature Store](https://docs.databricks.com/applications/machine-learning/feature-store/index.html) workflow based on the titanic dataset. The dataset is split into two domain specific tables: features based on purchases and demographic information. Machine learning features are typically sourced from many underlying tables/sources, and this simple workflow is designed to mimic this characteristic.
 
-Also, by create domain-specific feature sets, tables become more modular and can be leveraged across multiple projects and across teams. 
+Also, by creating domain-specific feature sets, tables become more modular and can be leveraged across multiple projects and across teams. 
 
 **Note**: If you require model deployment via Rest API, see the **online_store** directory for a demo deployment.
 
-### Getting started
+<img src="./img/feature_store_architecture.png"
+     width=2000
+     style="float: center;"/>
+
+## Getting started
 
 Note: Step 3 below differs slightly for AWS Single Tenant customers.
 
@@ -27,10 +31,16 @@ Note: Step 3 below differs slightly for AWS Single Tenant customers.
     - Navitate to the Feature Store icon on the left pane of the Databricks UI. There will be two entries, one for each feature table.
 
 
-5. Open the **fit_model** notebook and create an MLflow Experiment as detailed in the first cell; adjust the mlflow.set_experiment() location to your own Experiment's location.
+5. Run the **fit_model** notebook, which will perform the following tasks.
+    -  Create an MLflow experiment
+    - Create a training dataset by joining the two Feature Store tables
+    - Fit a model to the training dataset
+     - Log the model and the training dataset creation logic to the MLflow experiment
+     - Create an entry for the model in the Model Registry
+    - Promote the model to the 'Production' stage  
 
-6. Run the **fit_model** notebook.  
 
-7. Navigate to the MLflow Experiment and click on the run created by the notebook above. [Publish the model](https://docs.databricks.com/applications/machine-learning/manage-model-lifecycle/index.html#create-or-register-a-model-using-the-ui) to the Model Registry. Name the model and change the model's stage to 'Production'.
-
-8. Open the **model_inference** notebook and replace the model's name referenced by get_run_id() to your model's name in the Model Registry. Run the notebook to perform inference.
+6. Run the  **model_inference** notebook, which will perform the following tasks. 
+    - Create a sample DataFrame of new record ids to score 
+    - Create a helper function that given a model name and stage, will load the model's unique id
+    - Apply the model to the record ids. MLflow joins the relevent features to the record ids before applying the model and generating a prediction.
