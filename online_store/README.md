@@ -1,9 +1,9 @@
 # Setting up an Online Feature Store and Model Serving endpoint
 
-Some use cases require [Rest API model deployment](https://docs.databricks.com/applications/mlflow/model-serving.html) for inference. This is typically the case where an application outside of Databricks is recieving information and requires model predictions based on that information (imagine a user interface where a use can enter information and receive a prediction). Im some cases, this external application may not have access to all the features the model requires. We ca leverage the Feature Store to publish tables to an RDBMS that can be access by our MLflow model deployed via Rest API. In our scenario, the external application would only need to pass the PassengerId to the Rest endpoint to retrieve a prediction for a passenger.
+Some use cases require [Rest API model deployment](https://docs.databricks.com/applications/mlflow/model-serving.html) for inference. This is typically the case where an application outside of Databricks is recieving information and requires model predictions based on that information (imagine a user interface where a use can enter information and receive a prediction). Im some cases, this external application may not have access to all the features the model requires. We can leverage the Feature Store to publish tables to an RDBMS that can be access by our MLflow model deployed via Rest API. In our scenario, the external application would only need to pass the PassengerId to the Rest endpoint to retrieve a prediction for a passenger.
 
 <img src="../img/online_store_architecture.png"
-     width=700
+     width=900
      style="float: center;"/>
 
 ### To implement this demo in your own environment, follow the below steps.
