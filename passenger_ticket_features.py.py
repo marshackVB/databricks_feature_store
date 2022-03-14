@@ -38,7 +38,9 @@ def compute_passenger_ticket_features(df):
              .drop("CabinMulti_extract")
           
             # Round the Fare column
-             .withColumn("FareRounded", func.round(col("Fare"), 0)))
+             .withColumn("FareRounded", func.round(col("Fare"), 0))
+         
+             .drop('Ticket', 'Cabin'))
 
 # COMMAND ----------
 
@@ -48,6 +50,10 @@ def compute_passenger_ticket_features(df):
 
 df = spark.table('default.passenger_ticket_feautures')
 passenger_ticket_features = compute_passenger_ticket_features(df)
+
+# COMMAND ----------
+
+display(passenger_ticket_features)
 
 # COMMAND ----------
 

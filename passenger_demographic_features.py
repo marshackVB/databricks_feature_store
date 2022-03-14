@@ -31,7 +31,14 @@ def compute_passenger_demographic_features(df):
              # Create a feature indicating if a secondary name is present in the Name column
             .selectExpr("*", "case when length(NameSecondary_extract) > 0 then NameSecondary_extract else NULL end as NameSecondary")
             .drop('NameSecondary_extract')
-            .selectExpr("*", "case when NameSecondary is not NULL then '1' else '0' end as NameMultiple"))
+            .selectExpr("PassengerId",
+                        "Name",
+                        "Sex",
+                        "case when Age = 'NaN' then NULL else Age end as Age",
+                        "SibSp",
+                        "NamePrefix",
+                        "NameSecondary",
+                        "case when NameSecondary is not NULL then '1' else '0' end as NameMultiple"))
 
 # COMMAND ----------
 
@@ -41,6 +48,10 @@ def compute_passenger_demographic_features(df):
 
 df = spark.table('default.passenger_demographic_features')
 passenger_demographic_features = compute_passenger_demographic_features(df)
+
+# COMMAND ----------
+
+display(passenger_demographic_features)
 
 # COMMAND ----------
 
