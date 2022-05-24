@@ -70,6 +70,11 @@ feature_lookups = [
 
 # COMMAND ----------
 
+passengers_and_target = spark.table('default.passenger_labels')
+display(passengers_and_target)
+
+# COMMAND ----------
+
 # Select passenger records of interest
 passengers_and_target = spark.table('default.passenger_labels')
 
